@@ -19,7 +19,7 @@ class ApiConfig {
       j.temperature: {
         j.celsius: json[a.current][a.tempC],
         j.fahrenheit: json[a.current][a.tempF],
-        j.condition: json[a.current][a.condition],
+        j.condition: json[a.current][a.condition]['text'],
       },
     };
   }

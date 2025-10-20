@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather/core/classes/app_state.dart';
+import 'package:weather/models/weather_data.dart';
 import 'package:weather/repositories/weather_data_repository.dart';
 
 class WeatherDataProvider extends StatefulWidget {
@@ -11,7 +12,7 @@ class WeatherDataProvider extends StatefulWidget {
   @override
   State<WeatherDataProvider> createState() => WeatherProviderState();
 
-  WeatherProviderState of(BuildContext context) {
+  static WeatherProviderState of(BuildContext context) {
     return context
         .dependOnInheritedWidgetOfExactType<_InheritedWidget>()!
         .currentState;
@@ -19,7 +20,21 @@ class WeatherDataProvider extends StatefulWidget {
 }
 
 class WeatherProviderState extends State<WeatherDataProvider> {
-  AppState? appState;
+  AppState<WeatherData>? appState;
+
+  // Make first weather report request
+  Future<void> initiateRequest() async {
+    appState = DataState(
+      weatherData: await widget.repository.fetchCurrentWeatherData('London'),
+    );
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    initiateRequest();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
