@@ -8,7 +8,7 @@ class WeatherDataSource {
   Future<WeatherData> fetchCurrentWeatherData(String location) async {
     try {
       final response = await _dio.getUri<Map<String, dynamic>>(
-        Uri.parse(ApiConfig.currentWeather(location)),
+        Uri.parse(ApiConfig.getWeatherForecast(location,days: 2)),
       );
 
       if (response.data == null) throw NoResult;

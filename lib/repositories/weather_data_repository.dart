@@ -3,8 +3,18 @@ import 'package:weather/models/weather_data.dart';
 import 'package:weather/services/weather_data_source.dart';
 
 final WeatherData dummy = WeatherData(
-  city: 'Los Angeles',
-  temperature: Temperature(celsius: 23, fahrenheit: 70, condition: 'Raining'),
+  city: '.......',
+  temperature: Temperature(celsius: 0, fahrenheit: 0, condition: '.....'),
+  hoursForecast: HoursForecast(
+    forecast: [
+      Hour(celsius: 0, fahrenheit: 0, time: DateTime.now()),
+      Hour(celsius: 0, fahrenheit: 0, time: DateTime.now()),
+      Hour(celsius: 0, fahrenheit: 0, time: DateTime.now()),
+      Hour(celsius: 0, fahrenheit: 0, time: DateTime.now()),
+    ],
+  ),
+  time: DateTime.now(),
+  isDay: false,
 );
 
 abstract class WeatherDataRepository {

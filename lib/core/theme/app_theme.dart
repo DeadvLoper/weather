@@ -6,7 +6,9 @@ class AppTheme {
   static final Color primary = fromHex('#2C3545');
   static final Color onPrimary = fromHex('#FFFFFF');
 
-  static final Color secondary = fromHex('#D7FDEC');
+  static final Color backgroundColor = fromHex('#141921');
+
+  static final Color secondary = fromHex('#88cbce');
   static final Color onSecondary = fromHex('#FFFFFF');
 
   static Color fromHex(String hex) {

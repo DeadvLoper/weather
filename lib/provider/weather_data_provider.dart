@@ -24,8 +24,22 @@ class WeatherProviderState extends State<WeatherDataProvider> {
 
   // Make first weather report request
   Future<void> initiateRequest() async {
+    setState(() {
+      appState = LoadingState();
+    });
     appState = DataState(
       weatherData: await widget.repository.fetchCurrentWeatherData('London'),
+    );
+    setState(() {});
+  }
+
+  Future<void> searchCity(String city) async {
+    setState(() {
+      appState = LoadingState();
+    });
+
+    appState = DataState(
+      weatherData: await widget.repository.fetchCurrentWeatherData(city),
     );
     setState(() {});
   }
