@@ -23,6 +23,7 @@ class ApiConfig {
 
   static Map<String, dynamic> toModelCompatibleJson(Map<String, dynamic> json) {
     return {
+      c.id: 0,
       c.city: json[a.location][a.name],
       c.temperature: {
         c.celsius: json[a.current][a.tempC],

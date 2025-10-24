@@ -1,9 +1,10 @@
 import 'package:weather/models/sub_models.dart';
 import 'package:weather/models/weather_data.dart';
-import 'package:weather/services/weather_data_source.dart';
+import 'package:weather/services/weather_data_remote_source.dart';
 
-final WeatherData dummy = WeatherData(
-  city: '.......',
+final WeatherDataModel dummy = WeatherDataModel(
+  id: 0,
+  city: '',
   temperature: Temperature(celsius: 0, fahrenheit: 0, condition: '.....'),
   hoursForecast: HoursForecast(
     forecast: [
