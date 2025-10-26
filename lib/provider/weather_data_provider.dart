@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather/core/classes/app_state.dart';
+import 'package:weather/core/classes/messenger.dart';
+import 'package:weather/core/errors/errors.dart';
 import 'package:weather/models/weather_data.dart';
 import 'package:weather/repositories/weather_data_repository.dart';
 
@@ -24,24 +26,52 @@ class WeatherProviderState extends State<WeatherDataProvider> {
 
   // Make first weather report request
   Future<void> initiateRequest() async {
-    setState(() {
-      appState = LoadingState();
-    });
-    appState = DataState(
-      weatherData: await widget.repository.fetchCurrentWeatherData('London'),
-    );
-    setState(() {});
+    try {
+      setState(() {
+        appState = LoadingState();
+      });
+      appState = DataState(
+        weatherData: await widget.repository.fetchCurrentWeatherData('London'),
+      );
+      setState(() {});
+    } on NoResultsFound {
+      if (!mounted) return;
+      Messenger.showErrorMessage('Nothing found!', context: context);
+    } on NoInternetConnection {
+      if (!mounted) return;
+      Messenger.showErrorMessage('No Internet Connection!', context: context);
+    } catch (e) {
+      if (!mounted) return;
+      Messenger.showErrorMessage(
+        'Something unexpected happend!',
+        context: context,
+      );
+    }
   }
 
   Future<void> searchCity(String city) async {
-    setState(() {
-      appState = LoadingState();
-    });
+    try {
+      setState(() {
+        appState = LoadingState();
+      });
 
-    appState = DataState(
-      weatherData: await widget.repository.fetchCurrentWeatherData(city),
-    );
-    setState(() {});
+      appState = DataState(
+        weatherData: await widget.repository.fetchCurrentWeatherData(city),
+      );
+      setState(() {});
+    } on NoResultsFound {
+      if (!mounted) return;
+      Messenger.showErrorMessage('Nothing found!', context: context);
+    } on NoInternetConnection {
+      if (!mounted) return;
+      Messenger.showErrorMessage('No Internet Connection!', context: context);
+    } catch (e) {
+      if (!mounted) return;
+      Messenger.showErrorMessage(
+        'Something unexpected happend!',
+        context: context,
+      );
+    }
   }
 
   @override

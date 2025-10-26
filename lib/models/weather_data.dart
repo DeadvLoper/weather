@@ -31,14 +31,13 @@ class WeatherDataModel extends WeatherData {
   });
 
   factory WeatherDataModel.fromJson(Map<String, dynamic> json) {
-    // return dummy;
     return WeatherDataModel(
+      id: json[c.id],
       city: json[c.city],
       temperature: Temperature.fromJson(json[c.temperature]),
-      hoursForecast: HoursForecast.fromJson(json[a.forecastDay][0]),
+      hoursForecast: HoursForecast.fromJson(json),
       time: DateTime.parse(json[c.time]),
       isDay: json[c.isDay],
-      id: json[c.id],
     );
   }
 
@@ -52,12 +51,4 @@ class WeatherDataModel extends WeatherData {
       c.id: id,
     };
   }
-}
-
-//"{condition=Partly cloudy, celsius=12.2, fahrenheit=54.0}"
-
-Map<String, dynamic> fromSqliteStringToJson(String sqliteString) {
-  final Map<String, dynamic> json = {};
-
-  return json;
 }

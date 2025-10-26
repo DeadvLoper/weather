@@ -30,7 +30,7 @@ class ApiConfig {
         c.fahrenheit: json[a.current][a.tempF],
         c.condition: json[a.current][a.condition]['text'],
       },
-      a.forecastDay: json[a.forecast][a.forecastDay],
+      a.forecastDay: json[a.forecast][a.forecastDay][0][a.forecastHour],
       c.isDay: json[a.current][a.isDay] == 1,
       c.time: json[a.location][a.localtime],
     };

@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:weather/models/weather_data.dart';
+
+import 'package:weather/core/constants/api_json_constants.dart' as a;
+import 'package:weather/core/constants/json_constants.dart' as c;
 
 abstract class WeatherDataLocalSource {
   Future<WeatherData> loadFromCache();
@@ -31,7 +36,16 @@ class WeatherDataLocalSourceImpl implements WeatherDataLocalSource {
       'select * from weatherdata',
     );
 
-    return WeatherDataModel.fromJson(results.first);
+    final Map<String, dynamic> json = results.first;
+
+    return WeatherDataModel.fromJson({
+      c.id: json['ID'],
+      c.city: json['CITY'],
+      c.temperature: jsonDecode(json['TEMPERATURE']),
+      a.forecastDay: jsonDecode(json['FORECAST'])[a.forecastHour],
+      c.isDay: json['ISDAY'] == 1,
+      c.time: json['TIME'],
+    });
   }
 
   @override
@@ -40,35 +54,22 @@ class WeatherDataLocalSourceImpl implements WeatherDataLocalSource {
     String table = 'WEATHERDATA',
   }) async {
     final Database database = await getDatabase();
-    await database.rawInsert(
-      'INSERT INTO $table(ID, CITY ,TEMPERATURE, FORECAST,TIME, ISDAY) VALUES(${weatherData.id}, \'${weatherData.city}\',\'${weatherData.temperature.toJson().toSqliteString()}\',\'${weatherData.hoursForecast.toJson().toSqliteString()}\',\'${weatherData.time.toString()}\',\'${weatherData.isDay}\')',
-    );
+    // await database.rawInsert(
+    //   'INSERT INTO $table(ID, CITY ,TEMPERATURE, FORECAST,TIME, ISDAY) VALUES(${weatherData.id}, \'${weatherData.city}\',\'${jsonEncode(weatherData.temperature.toJson())}\',\'${jsonEncode(weatherData.hoursForecast.toJson())}\',\'${weatherData.time.toString()}\',${weatherData.isDay}) ON CONFLICT(ID) DO UPDATE',
+    // );
+    await database.insert(table, {
+      'ID': weatherData.id,
+      'CITY': weatherData.city,
+      'TEMPERATURE': jsonEncode(weatherData.temperature.toJson()),
+      'FORECAST': jsonEncode(weatherData.hoursForecast.toJson()),
+      'TIME': weatherData.time.toString(),
+      'ISDAY': weatherData.isDay ? 1 : 0,
+    }, conflictAlgorithm: ConflictAlgorithm.replace);
     await database.close();
 
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString('last-cache', DateTime.now().toString());
 
     return weatherData;
-  }
-}
-
-extension StringMap on Map<String, dynamic> {
-  String toSqliteString() {
-    StringBuffer st = StringBuffer();
-    st.write('{');
-
-    int i = 0;
-    for (final MapEntry entry in entries) {
-      final String key = entry.key;
-      final dynamic value = entry.value;
-      final String stringR = '"$key": "$value"';
-      st.write(stringR);
-      if (i < entries.length - 1) {
-        st.write(',');
-      }
-      i++;
-    }
-    st.write('}');
-    return st.toString();
   }
 }

@@ -36,7 +36,7 @@ class HoursForecast {
   factory HoursForecast.fromJson(Map<String, dynamic> json) {
     return HoursForecast(
       forecast: List<Hour>.from(
-        json[a.forecastHour]
+        json[a.forecastDay]
             .map((hourJson) => Hour.formJson(hourJson))
             .toList(),
       ),

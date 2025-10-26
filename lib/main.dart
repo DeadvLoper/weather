@@ -13,11 +13,11 @@ import 'package:weather/ui/widgets/weather_expanded_widget.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    WeatherDataProvider(
-      repository: WeatherDataRepositoryImpl(),
-      child: const MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SafeArea(child: App()),
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: WeatherDataProvider(
+        repository: WeatherDataRepositoryImpl(),
+        child: SafeArea(child: App()),
       ),
     ),
   );
