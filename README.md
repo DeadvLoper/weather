@@ -1,6 +1,19 @@
 # weather
 
-A new Flutter project.
+Basic weather app built with Flutter.
+
+
+
+## Dependencies
+- sqflite: used for local caching of weather data.
+- shared_preferences: used for key value caching.
+
+## Contributing
+  Contributions are welcome, make it your playground and play with code changes as this
+  is just one of the many dummy apps on github.
+  To get started make sure to get an api key at weatherapi.com, it's free.
+  Then create a .env file and add the api key as a value in the value with key APIKEY
+  Then run the app.
 
 ## Getting Started
 
